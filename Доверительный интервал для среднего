@@ -1,0 +1,77 @@
+задача 1
+import numpy as np
+from scipy.stats import norm
+
+sigma = 16  # стандартное отклонение
+mean_sample = 80  # выборочное среднее
+n = 256  # объем выборки
+alpha = 0.05  # уровень значимости (для 95% доверительного интервала)
+
+# Находится критическое значение Z_alpha/2 для нормального распределения
+z_critical = norm.ppf(1 - alpha/2)
+
+# Вычисляется доверительный интервал
+lower_bound = mean_sample - z_critical * sigma / np.sqrt(n)
+upper_bound = mean_sample + z_critical * sigma / np.sqrt(n)
+
+print(f"Доверительный интервал для среднего: ({lower_bound:.2f}, {upper_bound:.2f})")
+
+
+задача 2
+
+import numpy as np
+from scipy.stats import t
+
+# Измеренные данные
+data = np.array([6.9, 6.1, 6.2, 6.8, 7.5, 6.3, 6.4, 6.9, 6.7, 6.1])
+alpha = 0.05  # уровень значимости (для 95% доверительного интервала)
+
+# Вычисляем выборочное среднее и стандартное отклонение
+mean_sample = np.mean(data)
+std_dev = np.std(data, ddof=1)  # ddof=1 для получения несмещенной оценки стандартного отклонения
+n = len(data)
+
+# Находим критическое значение t_alpha/2 для t-распределения с n-1 степенями свободы
+t_critical = t.ppf(1 - alpha/2, df=n-1)
+
+# Вычисляем стандартную ошибку среднего
+se = std_dev / np.sqrt(n)
+
+# Вычисляем доверительный интервал
+lower_bound = mean_sample - t_critical * se
+upper_bound = mean_sample + t_critical * se
+print(f"Доверительный интервал для среднего: ({lower_bound:.3f}, {upper_bound:.3f})")
+
+
+задача 3 
+
+import numpy as np
+from scipy.stats import t
+
+# Рост дочерей и матерей
+height_children = np.array([175, 167, 154, 174, 178, 148, 160, 167, 169, 170])
+height_mothers = np.array([178, 165, 165, 173, 168, 155, 160, 164, 178, 175])
+alpha = 0.05  # уровень значимости (для 95% доверительного интервала)
+
+# Вычисляем выборочные средние и стандартные отклонения
+mean_children = np.mean(height_children)
+mean_mothers = np.mean(height_mothers)
+std_dev_children = np.std(height_children, ddof=1)
+std_dev_mothers = np.std(height_mothers, ddof=1)
+n1 = len(height_children)
+n2 = len(height_mothers)
+
+# Вычисляем стандартную ошибку разности средних
+se_diff = np.sqrt(std_dev_children**2 / n1 + std_dev_mothers**2 / n2)
+
+# Находим критическое значение t_alpha/2 для t-распределения с n1+n2-2 степенями свободы
+t_critical = t.ppf(1 - alpha/2, df=n1+n2-2)
+
+# Вычисляем доверительный интервал для разности средних
+diff_mean = mean_children - mean_mothers
+lower_bound = diff_mean - t_critical * se_diff
+upper_bound = diff_mean + t_critical * se_diff
+
+print(f"95% Доверительный интервал для разности средних: ({lower_bound:.2f}, {upper_bound:.2f})")
+95% Доверительный интервал для разности средних: (-10.46, 6.66)
+
